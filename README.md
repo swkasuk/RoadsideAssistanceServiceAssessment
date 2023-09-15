@@ -1,16 +1,16 @@
-##EmergencyRoadsideAssistance Serivce
+EmergencyRoadsideAssistance Serivce
 
 ## Description
 
 - This project utilizes Spring Boot framework and Java, Java Persistence to build and implement the REST API Service that helps the customer with a disabled vehicle to get immediate roadside assistance.
 
-  The EmergencyRoadsideAssistance service provides :
-- The customer an ability to search and find the 5 nearest assistants, reserve and release an assistant. 
-- The service provider assistant to update their location.
-- Return the 5 nearest service trucks i.e assistants ordered by ascending distance
-		-This is achieved by computing the geohash of the customer's location and comparing it with the assistants geohash based on their recent location.
-- Reserve a service provider for a customer
-- Release a service provider from a customer
+- The EmergencyRoadsideAssistance service provides :
+	- The customer an ability to search and find the 5 nearest assistants, reserve and release an assistant. 
+	- The service provider assistant to update their location.
+	- Return the 5 nearest service trucks i.e assistants ordered by ascending distance
+		- This is achieved by computing the geohash of the customer's location and comparing it with the assistants geohash based on their recent location.
+	- Reserve a service provider for a customer
+	- Release a service provider from a customer
 
 
 
@@ -34,6 +34,7 @@
 ## Getting Started
 
 Clone this repository to your local machine:
+-	https://github.com/swkasuk/RoadsideAssistanceServiceAssessment.git
 
 ## Project Structure
 - src/main/java contains all the source files.
@@ -184,12 +185,12 @@ The following endpoints are exposed via the REST API controller ROAController.ja
 
 
 
-##Testing
- **CURL Commands **
+## Testing
+ CURL Commands
 
-- Once the application is up and running in local ,use the sample below curl commands to test the different endpoints that are described in the endpoints section to validate the functionality.The customer id and the customer location can be adjusted to test various scenarios. 5 customers with customerId from 111 to 555 have been added in the inital data script. The below sequence of curl commands are demonstrated for a customer id 111.
+- Once the application is up and running in local ,use the sample below curl commands to test the different endpoints that are described in the endpoints section to validate the functionality.These curl commands can be imported into Postman and run. The customer id and the customer location can be adjusted to test various scenarios. 5 customers with customerId from 111 to 555 have been added in the inital data script. The below sequence of curl commands are demonstrated for a customer id 111.
 		
-	curl --location --request PUT 'http://localhost:8312/roa/v1/serviceprovider/assistant' \
+	-	curl --location --request PUT 'http://localhost:8312/roa/v1/serviceprovider/assistant' \
 	--header 'Content-Type: application/json' \
 	--data-raw '{
     "assistantId":"2",
@@ -197,26 +198,26 @@ The following endpoints are exposed via the REST API controller ROAController.ja
     "asstLocLongitude":-80.085059
 	}'
 
-	curl --location --request GET 'http://localhost:8312/roa/v1/customer/111/findNearestAssistants?custLocLatitude=42.496977&custLocLongitude=-83.54131'
+	-	curl --location --request GET 'http://localhost:8312/roa/v1/customer/111/findNearestAssistants?custLocLatitude=42.496977&custLocLongitude=-83.54131'
 	
 	
-	curl --location --request POST 'http://localhost:8312/roa/v1/customer/reserveAssistant' \
-	--header 'Content-Type: application/json' \
-	--data-raw '{
-    "custId": "111",
-    "custLocLat" : 42.496977,
-    "custLocLong" :-83.54131
-	}'
+	-	curl --location --request POST 'http://localhost:8312/roa/v1/customer/reserveAssistant' \
+		--header 'Content-Type: application/json' \
+		--data-raw '{
+		    "custId": "111",
+		    "custLocLat" : 42.496977,
+		    "custLocLong" :-83.54131
+			}'
 		
-	curl --location --request PUT 'http://localhost:8312/roa/v1/customer/releaseAssistant' \
-	--header 'Content-Type: application/json' \
-	--data-raw '{
-    "custId": "111",
-    "assistantId" : "3",
-    "serviceReqStatus" : "Completed"
-	}'
+	-	curl --location --request PUT 'http://localhost:8312/roa/v1/customer/releaseAssistant' \
+		--header 'Content-Type: application/json' \
+		--data-raw '{
+		    "custId": "111",
+		    "assistantId" : "3",
+		    "serviceReqStatus" : "Completed"
+			}'
     
- **JUNIT Tests **
+ JUNIT Tests
 - The Junit test cases for the serivce can be executed by running the test file EmergencyRoadsideAssistanceServiceApplicationTests.java as 'Junit test'. These tests are for the unit testing of the services layer by mocking the data layer.
 
  
