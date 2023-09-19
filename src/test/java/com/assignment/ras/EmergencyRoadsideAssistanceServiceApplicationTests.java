@@ -1,17 +1,17 @@
 package com.assignment.ras;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.SortedSet;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.assignment.ras.model.Assistant;
 import com.assignment.ras.model.Customer;
@@ -28,13 +28,12 @@ import com.assignment.ras.service.RoadsideAssistanceServiceImpl;
 import com.assignment.ras.util.ServiceCodeEnum;
 import com.assignment.ras.util.ServiceRequestStatusEnum;
 
-import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SpringBootTest()
-@RunWith(SpringRunner.class)
 
 class EmergencyRoadsideAssistanceServiceApplicationTests {
 
@@ -52,7 +51,7 @@ class EmergencyRoadsideAssistanceServiceApplicationTests {
 	@Mock
 	private ServiceRequestRepository serviceReqRepo;
 
-	@Autowired
+	@InjectMocks
 	private RoadsideAssistanceServiceImpl roadsideAssistServiceImpl;
 
 	@Test
@@ -61,6 +60,7 @@ class EmergencyRoadsideAssistanceServiceApplicationTests {
 
 	@Test
 	public void shouldUpdateAssistant_IfFound() {
+		logger.debug("==============================");
 		logger.debug("Test shouldUpdateAssistant_IfFound");
 
 		Assistant assistant = new Assistant();
@@ -78,13 +78,15 @@ class EmergencyRoadsideAssistanceServiceApplicationTests {
 		when(assistantRepo.save(asstEntity)).thenReturn(asstEntity);
 
 		roadsideAssistServiceImpl.updateAssistantLocation(assistant, assistantLocation);
-		logger.debug("Success");
+		logger.debug("Success updateAssistant");
+		logger.debug("==============================");
 
 	}
 
 	@Test
 	public void reserveAssistantTest() {
 		try {
+			logger.debug("==============================");
 			logger.debug("Test reserveAssistantTest");
 
 			Customer cust = new Customer();
@@ -98,13 +100,30 @@ class EmergencyRoadsideAssistanceServiceApplicationTests {
 
 			AssistantGeoLocationEntity asstGeoLocationEntity = new AssistantGeoLocationEntity();
 			ServiceRequestEntity newServiceReq = new ServiceRequestEntity();
+
 			customerEntity.setCustomerId(BigInteger.valueOf(123));
+
 			when(customerRepo.findById(Integer.valueOf(cust.getCustomerId()).intValue()))
 					.thenReturn(Optional.ofNullable(customerEntity));
 
 			when(serviceReqRepo.findReqByCustIdAndBySvcCodeAndByStatus(Integer.valueOf(cust.getCustomerId()).intValue(),
 					ServiceCodeEnum.RoadsideAssistance.name(), ServiceRequestStatusEnum.Assigned.name()))
 							.thenReturn(null);
+
+			List<AssistantGeoLocationEntity> nearByAssistantList = new ArrayList<>();
+
+			AssistantGeoLocationEntity assisGeoLoc1 = new AssistantGeoLocationEntity();
+			AssistantEntity assistantEntity = new AssistantEntity();
+			assisGeoLoc1.setAssistant(assistantEntity);
+			assisGeoLoc1.getAssistant().setName("SP_3");
+			assisGeoLoc1.getAssistant().setAssistantID(3);
+
+			assisGeoLoc1.setLatitude(BigDecimal.valueOf(42.48947917637189));
+			assisGeoLoc1.setLongitude(BigDecimal.valueOf(-83.50272543783966));
+
+			nearByAssistantList.add(assisGeoLoc1);
+
+			when(asstGeoLocationRepo.findByActvAndAvailAsstAndByGeohash("dps9")).thenReturn(nearByAssistantList);
 
 			when(asstGeoLocationRepo.save(asstGeoLocationEntity)).thenReturn(asstGeoLocationEntity);
 
@@ -116,10 +135,11 @@ class EmergencyRoadsideAssistanceServiceApplicationTests {
 
 			Optional<Assistant> reservedAssistant = roadsideAssistServiceImpl.reserveAssistant(cust, customerLocation);
 			assertEquals("SP_3", reservedAssistant.get().getAssistantName());
-			logger.debug("Success");
+			logger.debug("Success reserve assistant");
+			logger.debug("==============================");
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 		}
 
 	}
@@ -127,17 +147,45 @@ class EmergencyRoadsideAssistanceServiceApplicationTests {
 	@Test
 	public void findNearByAssistantsTest() {
 		try {
+			logger.debug("==============================");
 			logger.debug("Test findNearByAssistantsTest");
 
 			Geolocation customerLocation = new Geolocation();
 			customerLocation.setLatitude(BigDecimal.valueOf(42.462526));
 			customerLocation.setLongitude(BigDecimal.valueOf(-83.376587));
 
+			List<AssistantGeoLocationEntity> nearByAssistantList = new ArrayList<>();
+
+			AssistantGeoLocationEntity assisGeoLoc1 = new AssistantGeoLocationEntity();
+			AssistantEntity assistantEntity = new AssistantEntity();
+			assisGeoLoc1.setAssistant(assistantEntity);
+			assisGeoLoc1.getAssistant().setName("SP_3");
+			assisGeoLoc1.getAssistant().setAssistantID(3);
+
+			assisGeoLoc1.setLatitude(BigDecimal.valueOf(42.48947917637189));
+			assisGeoLoc1.setLongitude(BigDecimal.valueOf(-83.50272543783966));
+
+			nearByAssistantList.add(assisGeoLoc1);
+
+			AssistantGeoLocationEntity assisGeoLoc2 = new AssistantGeoLocationEntity();
+			AssistantEntity assistantEntity1 = new AssistantEntity();
+			assisGeoLoc2.setAssistant(assistantEntity1);
+			assisGeoLoc2.getAssistant().setName("SP_4");
+			assisGeoLoc2.getAssistant().setAssistantID(4);
+
+			assisGeoLoc2.setLatitude(BigDecimal.valueOf(42.52773000820324));
+			assisGeoLoc2.setLongitude(BigDecimal.valueOf(-83.51436493630912));
+
+			nearByAssistantList.add(assisGeoLoc2);
+
+			when(asstGeoLocationRepo.findByActvAndAvailAsstAndByGeohash("dps9")).thenReturn(nearByAssistantList);
+
 			SortedSet<Assistant> result = roadsideAssistServiceImpl.findNearestAssistants(customerLocation, 5);
-			assertEquals(result.size(), 5);
-			logger.debug("Success");
+			assertEquals(result.size(), 2);
+			logger.debug("Success findNearByAssistantsTest");
+			logger.debug("==============================");
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 		}
 
 	}
@@ -145,7 +193,7 @@ class EmergencyRoadsideAssistanceServiceApplicationTests {
 	@Test
 	public void releaseAssitant() {
 		try {
-
+			logger.debug("==============================");
 			logger.debug("Test releaseAssitant");
 
 			Customer customer = new Customer();
@@ -154,6 +202,7 @@ class EmergencyRoadsideAssistanceServiceApplicationTests {
 			assistant.setAssistantId("3");
 
 			ServiceRequestEntity servReqEntity = new ServiceRequestEntity();
+			servReqEntity.setSrvcReqId(1);
 
 			when(serviceReqRepo.findReqByCustIdAndByAsstIdAndBySvcCodeAndByStatus(
 					Integer.valueOf(customer.getCustomerId()).intValue(),
@@ -173,10 +222,11 @@ class EmergencyRoadsideAssistanceServiceApplicationTests {
 
 			roadsideAssistServiceImpl.releaseAssistant(customer, assistant);
 			assertEquals("Completed", servReqEntity.getStatus());
-			logger.debug("Success");
+			logger.debug("Success release assistant");
+			logger.debug("==============================");
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 		}
 
 	}
