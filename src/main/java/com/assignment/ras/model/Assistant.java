@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 
 @JsonInclude(value = Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@AllArgsConstructor
 @NoArgsConstructor
 public class Assistant extends Geolocation implements Serializable {
 
