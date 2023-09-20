@@ -4,8 +4,11 @@ import java.io.Serializable;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import lombok.NoArgsConstructor;
+
 
 @MappedSuperclass
+@NoArgsConstructor
 public class ContactInfoEntity extends BaseEntity implements Serializable {
 
 	/**
