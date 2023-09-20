@@ -12,11 +12,13 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.NoArgsConstructor;
+
 
 @Entity
 @Table(name = "assistant")
 @NamedQuery(name = "AssistantEntity.findAll", query = "SELECT f FROM AssistantEntity f")
-
+@NoArgsConstructor
 public class AssistantEntity extends BaseEntity implements Serializable {
 
 	
