@@ -14,12 +14,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 
 @Entity
 @Table(name = "customer")
 @NamedQuery(name = "CustomerEntity.findAll", query = "SELECT f FROM CustomerEntity f")
-@Builder
+@NoArgsConstructor
 public class CustomerEntity extends ContactInfoEntity implements Serializable {
 
 	/**
