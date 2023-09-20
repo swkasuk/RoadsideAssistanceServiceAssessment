@@ -13,6 +13,8 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import lombok.NoArgsConstructor;
+
 
 @Entity
 @Table(name = "assistant_geo_location")
@@ -20,6 +22,7 @@ import jakarta.persistence.Transient;
 
 @NamedQuery(name = "AssistantGeoLocationEntity.findByActvAndAvailAsstAndByGeohash", query = "SELECT f FROM AssistantGeoLocationEntity f where "
 		+ "f.assistant.activeInd='Y' and f.assistant.reservedInd!='Y' and f.locGeohashTxt = ?1")
+@NoArgsConstructor
 
 public class AssistantGeoLocationEntity extends BaseEntity {
 
