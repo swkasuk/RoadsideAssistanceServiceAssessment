@@ -8,8 +8,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import lombok.NoArgsConstructor;
+
 
 @MappedSuperclass
+@NoArgsConstructor
 public class BaseEntity implements Serializable {
 
 	/**
