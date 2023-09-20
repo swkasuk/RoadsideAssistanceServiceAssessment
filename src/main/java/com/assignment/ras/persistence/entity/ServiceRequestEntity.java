@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "service_request")
@@ -18,6 +19,7 @@ import jakarta.persistence.Table;
 		+ " f.customer.customerId = ?1 and f.assistant.assistantID =?2 and f.srvcReqCode =?3 and f.status = ?4")
 @NamedQuery(name = "ServiceRequestEntity.findReqByCustIdAndBySvcCodeAndByStatus", query = "SELECT f FROM ServiceRequestEntity f where "
 		+ " f.customer.customerId = ?1  and f.srvcReqCode =?2 and f.status = ?3")
+@NoArgsConstructor
 
 public class ServiceRequestEntity extends BaseEntity {
 
